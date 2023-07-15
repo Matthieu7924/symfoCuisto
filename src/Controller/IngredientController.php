@@ -59,6 +59,11 @@ class IngredientController extends AbstractController
             $em->persist($ingredient);
             $em->flush($ingredient);
 
+            $this->addFlash(
+                'success',
+                'ingrédient correctement ajouté!'
+            );
+
             return $this->redirectToRoute('app_ingredient');
 
         }
@@ -68,4 +73,19 @@ class IngredientController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    
+    #[Route('/ingredient/edition/{id}', name: 'ingredient_update', methods:['GET', 'POST'])]
+    public function edit(IngredientRepository $repo, $id):Response
+    {
+        $ingredient = $repo->findOneBy(['id' => $id]);
+        
+        $form = $this->createForm(IngredientType::class, $ingredient);
+
+        return $this->render('pages/ingredient/edit.html.twig',[
+            'form' => $form->createView()
+        ]);
+
+    }
+
 }

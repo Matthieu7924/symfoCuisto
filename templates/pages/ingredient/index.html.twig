@@ -8,6 +8,14 @@
     {% if not ingredients.items is same as ([]) %}
         <h1>Mes ingredients</h1>
 
+        <a href="{{ path('ingredient_new') }}" class="btn btn-primary">Nouvel ingrédient</a>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success" data-timer="10000">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         <div class="mt-2 count">
             <h6>il y a {{ totalIng }} ingrédients au total</h6>
         </div>
