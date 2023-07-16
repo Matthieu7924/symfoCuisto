@@ -28,6 +28,9 @@
                 <th scope="col">Nom</th>
                 <th scope="col">Prix</th>
                 <th scope="col">Date de création</th>
+                <th scope="col">Edition</th>
+                <th scope="col">Suppression</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -37,6 +40,8 @@
                         <td>{{ ingredient.name }}</td>
                         <td>{{ ingredient.price }}</td>
                         <td>{{ ingredient.createdAt|date('d/m/Y') }}</td>
+                        <td><a href="{{ path('ingredient_update', {id: ingredient.id}) }}" class="btn btn-info">Modifier</a></td>
+                        <td><a href="{{ path('ingredient_delete', {id: ingredient.id}) }}" class="btn btn-warning">Supprimer</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -45,9 +50,24 @@
     <div class="mt-4 d-flex justify-content-center navigation">
         {{ knp_pagination_render(ingredients) }}
     </div>
+    <!-- Fenêtre modale de confirmation de suppression -->
+            <div class="modal" id="deleteConfirmationModal">
+                <div class="modal-content">
+                    <p>Êtes-vous sûr de vouloir supprimer cet ingrédient ?</p>
+                    <div class="modal-buttons">
+                        <a href="#" class="btn btn-danger" id="confirmDeleteBtn">Oui</a>
+                        <a href="#" class="btn btn-secondary" id="cancelDeleteBtn">Annuler</a>
+                    </div>
+                </div>
+            </div>    
 
     {% else %}
     <h4>il n'y a pas d'ingredients</h4>
     {% endif %}
 
+  
+
 {% endblock %}
+
+
+

@@ -76,16 +76,59 @@ class IngredientController extends AbstractController
 
     
     #[Route('/ingredient/edition/{id}', name: 'ingredient_update', methods:['GET', 'POST'])]
-    public function edit(IngredientRepository $repo, $id):Response
+    public function edit(
+        IngredientRepository $repo,
+        int $id,
+        // Ingredient $ingredient,
+        Request $request, 
+        EntityManagerInterface $em 
+        ):Response
     {
+        //soit on passe par le repoitory avec comme paramètres de la fonction IngredientRepository $repo et  $id
         $ingredient = $repo->findOneBy(['id' => $id]);
-        
+        //soit on passe par l'objet
         $form = $this->createForm(IngredientType::class, $ingredient);
-
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $ingredient = $form->getData();
+            $em->persist($ingredient);
+            $em->flush($ingredient);
+        
+            $this->addFlash(
+                'success',
+                'mise a jour effectuée'
+            );
+            return $this->redirectToRoute('app_ingredient');
+        }
         return $this->render('pages/ingredient/edit.html.twig',[
-            'form' => $form->createView()
+            'form'=>$form->createView()
         ]);
+    }
 
+    #[Route('/ingredient/suppression/{id}', name: 'ingredient_delete', methods:['GET'])]
+    public function delete(
+        EntityManagerInterface $em, 
+        $id): Response
+    {
+        $ingredient = $em->getRepository(Ingredient::class)->find($id);
+        if(!$ingredient)
+        {
+            $this->addFlash(
+                'success',
+                'ingrédient introuvable'
+            );
+            return $this->redirectToRoute('app_ingredient');
+        }
+            $em->remove($ingredient);
+            $em->flush();
+            $this->addFlash(
+                'success',
+                'suppression effectuée'
+            );
+            return $this->redirectToRoute('app_ingredient');
+        
     }
 
 }
+

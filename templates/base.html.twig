@@ -12,6 +12,7 @@
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         {% endblock %}
     </head>
     <body>
@@ -19,6 +20,40 @@
             {% include "partials/_header.html.twig" %}
         {% endblock %}
 
-        {% block body %}{% endblock %}
+        {% block body %}
+            
+        {% endblock %}
+
+        {% block javascript %}
+            <script>
+                // Récupérer le bouton de suppression et la fenêtre modale de confirmation
+                const deleteButtons = document.querySelectorAll('.delete-ingredient');
+                const modal = document.getElementById('deleteConfirmationModal');
+                const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+                const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+                // Ajouter un gestionnaire d'événements aux boutons de suppression
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        const ingredientId = this.getAttribute('data-id');
+                        // Afficher la fenêtre modale de confirmation
+                        modal.style.display = 'block';
+
+                        // Ajouter un gestionnaire d'événements au bouton de confirmation de suppression
+                        confirmDeleteBtn.addEventListener('click', function () {
+                            // Rediriger vers l'URL de suppression de l'ingrédient
+                            window.location.href = `/ingredient/suppression/${ingredientId}`;
+                        });
+
+                        // Ajouter un gestionnaire d'événements au bouton d'annulation de suppression
+                        cancelDeleteBtn.addEventListener('click', function () {
+                            // Cacher la fenêtre modale
+                            modal.style.display = 'none';
+                        });
+                    });
+                });
+            </script>        
+            {% endblock %}
     </body>
 </html>
