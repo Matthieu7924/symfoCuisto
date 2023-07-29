@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les Recettes{% endblock %}
+
+{% block body %}
+
+    <div class="mt-4 container">
+    {% if not recettes.items is same as ([]) %}
+        <h1>Mes recettes</h1>
+
+        <a href="{{ path('recette_new') }}" class="btn btn-primary">Nouvelle recette</a>
+
+
+        {# <div class="mt-2 count">
+            <h6>il y a {{ totalRec }} recettes au total</h6>
+        </div> #}
+
+
+        <table class="mt-4 table table-hover">
+            <thead>
+                <tr>
+                <th scope="col">Numéro</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Prix</th>
+                <th scope="col">Difficulté</th>
+                <th scope="col">Date de création</th>
+                <th scope="col">Edition</th>
+                <th scope="col">Suppression</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for recette in recettes %}
+                    <tr class="table-primary">
+                        <th scope="row">{{ recette.id }}</th>
+                        <td>{{ recette.name }}</td>
+                        <td>{{ recette.price is same as(null) ? 'NR' : recette.price }}</td>
+                        <td>{{ recette.difficulty is same as(null) ? 'NR' : recette.difficulty }}</td>
+                        <td>{{ recette.createdAt|date('d/m/Y') }}</td>
+                        {# <td><a href="{{ path('recette_update', {id: recette.id}) }}" class="btn btn-info">Modifier</a></td>
+                        <td><a href="{{ path('recette_delete', {id: recette.id}) }}" class="btn btn-warning">Supprimer</a></td> #}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="mt-4 d-flex justify-content-center navigation">
+        {{ knp_pagination_render(recettes) }}
+    </div>
+    <!-- Fenêtre modale de confirmation de suppression -->
+            <div class="modal" id="deleteConfirmationModal">
+                <div class="modal-content">
+                    <p>Êtes-vous sûr de vouloir supprimer cet ingrédient ?</p>
+                    <div class="modal-buttons">
+                        <a href="#" class="btn btn-danger" id="confirmDeleteBtn">Oui</a>
+                        <a href="#" class="btn btn-secondary" id="cancelDeleteBtn">Annuler</a>
+                    </div>
+                </div>
+            </div>    
+
+    {% else %}
+    <h4>il n'y a pas de recettes</h4>
+    {% endif %}
+
+
+{% endblock %}
+
+
+
