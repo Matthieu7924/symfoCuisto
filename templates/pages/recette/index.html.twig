@@ -8,6 +8,12 @@
     {% if not recettes.items is same as ([]) %}
         <h1>Mes recettes</h1>
 
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success" data-timer="10000">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         <a href="{{ path('recette_new') }}" class="btn btn-primary">Nouvelle recette</a>
 
 
