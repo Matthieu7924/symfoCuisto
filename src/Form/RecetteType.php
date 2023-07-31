@@ -53,18 +53,6 @@ class RecetteType extends AbstractType
                 new Assert\LessThan(1001)
             ]
         ])
-        ->add('isFavorite', CheckboxType::class,[
-            'attr' =>[
-                'class' => 'form-control'
-            ],
-            'required' => false,
-            'label'=>'Favoris?',
-            'label_attr' =>[
-                'class' => 'form-label  mt-4'
-            ],
-            'constraints' => [
-            ]
-        ])
         ->add('time', IntegerType::class,[
             'attr' =>[
                 'class' => 'form-control',
@@ -108,6 +96,19 @@ class RecetteType extends AbstractType
             'constraints' => [
                 new Assert\Positive(),
                 new Assert\LessThan(51)
+            ]
+        ])
+        ->add('isFavorite', CheckboxType::class,[
+            'attr' =>[
+                'class' => 'form-control'
+            ],
+            'required' => false,
+            'label'=>'Favoris?',
+            'label_attr' =>[
+                'class' => 'form-label  mt-4'
+            ],
+            'constraints' => [
+                new Assert\NotNull()
             ]
         ])
         ->add('ingredients', EntityType::class, [
