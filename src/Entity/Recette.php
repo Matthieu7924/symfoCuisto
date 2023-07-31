@@ -21,7 +21,7 @@ class Recette
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private ?int $id;
 
     #[ORM\Column(length: 50)]
     #[Assert\NotBlank()]
@@ -40,7 +40,7 @@ class Recette
 
     #[ORM\Column(nullable: true)]
     #[Assert\Positive()]
-    #[Assert\LessThan(6)]
+    #[Assert\LessThan(51)]
     private ?int $difficulty = null;
 
     #[ORM\Column(type: Types::TEXT)]

@@ -86,8 +86,8 @@ class RecetteType extends AbstractType
         ->add('difficulty', RangeType::class,[
             'attr' =>[
                 'class' => 'form-control',
-                'minLength' => 1,
-                'mawLength' => 1441
+                'min' => 1, // Mettez à jour la valeur minimale
+                'max' => 50, // Mettez à jour la valeur maximale
             ],
             'label'=>'Difficulté',
             'label_attr' =>[
@@ -106,9 +106,6 @@ class RecetteType extends AbstractType
             'label'=>'Favoris?',
             'label_attr' =>[
                 'class' => 'form-label  mt-4'
-            ],
-            'constraints' => [
-                new Assert\NotNull()
             ]
         ])
         ->add('ingredients', EntityType::class, [

@@ -46,6 +46,7 @@ class RecetteController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) // Check if the form is submitted and valid
         {
+            // dd($form->getData());
             $recette = $form->getData();
             $em->persist($recette);
             $em->flush();
@@ -55,7 +56,7 @@ class RecetteController extends AbstractController
                 'recette correctement ajoutée!'
             );
             
-            return $this->redirectToRoute('pages/recette/index.html.twig');
+            return $this->redirectToRoute('app_recette');
         }
         return $this->render('pages/recette/new.html.twig', [
             'form' => $form->createView()
