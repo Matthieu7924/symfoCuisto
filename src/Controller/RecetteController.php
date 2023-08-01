@@ -63,4 +63,36 @@ class RecetteController extends AbstractController
         ]);
     }
 
+    #[Route('/recette/edition/{id}', name: 'recette_update', methods:['GET', 'POST'])]
+    public function edit(
+        RecetteRepository $repo,
+        int $id,
+        // Ingredient $ingredient,
+        Request $request, 
+        EntityManagerInterface $em 
+        ):Response
+    {
+        //soit on passe par le repoitory avec comme paramètres de la fonction IngredientRepository $repo et  $id
+        $recette = $repo->findOneBy(['id' => $id]);
+        //soit on passe par l'objet
+        $form = $this->createForm(RecetteType::class, $recette);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $recette = $form->getData();
+            $em->persist($recette);
+            $em->flush($recette);
+        
+            $this->addFlash(
+                'success',
+                'mise a jour effectuée'
+            );
+            return $this->redirectToRoute('app_recette');
+        }
+        return $this->render('pages/recette/edit.html.twig',[
+            'form'=>$form->createView()
+        ]);
+    }
+
+
 }
