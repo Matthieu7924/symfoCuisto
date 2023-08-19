@@ -42,13 +42,15 @@ class RecetteType extends AbstractType
         ])
         ->add('price', MoneyType::class,[
             'attr' =>[
-                'class' => 'form-control'
+                'class' => 'form-control', 
             ],
+            'required' => false,
             'label'=>'Prix',
             'label_attr' =>[
                 'class' => 'form-label  mt-4'
             ],
             'constraints' => [
+                
                 new Assert\Positive(),
                 new Assert\LessThan(1001)
             ]
@@ -57,8 +59,9 @@ class RecetteType extends AbstractType
             'attr' =>[
                 'class' => 'form-control',
                 'minLength' => 1,
-                'mawLength' => 1441
+                'mawLength' => 1441,
             ],
+            'required' => false,
             'label'=>'Temps (en minutes)',
             'label_attr' =>[
                 'class' => 'form-label  mt-4'
@@ -72,8 +75,9 @@ class RecetteType extends AbstractType
             'attr' =>[
                 'class' => 'form-control',
                 'minLength' => 1,
-                'mawLength' => 1441
+                'mawLength' => 1441,
             ],
+            'required' => false,
             'label'=>'Nombre de personnes',
             'label_attr' =>[
                 'class' => 'form-label  mt-4'
@@ -89,6 +93,7 @@ class RecetteType extends AbstractType
                 'min' => 1, // Mettez à jour la valeur minimale
                 'max' => 50, // Mettez à jour la valeur maximale
             ],
+            'required' => false,
             'label'=>'Difficulté',
             'label_attr' =>[
                 'class' => 'form-label  mt-4'

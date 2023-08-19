@@ -87,7 +87,7 @@ class RecetteController extends AbstractController
         
             $this->addFlash(
                 'success',
-                'mise a jour effectuée'
+                'Recette mise a jour effectuée'
             );
             return $this->redirectToRoute('app_recette');
         }
