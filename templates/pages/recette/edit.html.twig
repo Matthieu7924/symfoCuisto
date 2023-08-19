@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+
+    
+
+
+        <h1>Modifier la recette</h1>
+        {{ form_start(form) }}
+            <div class="form-error">
+                {{ form_errors(form) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.name) }}                
+                {{ form_widget(form.name) }} 
+                <div class="form-error">
+                    {{ form_errors(form.name) }}            
+                </div>               
+            </div>
+            <div class="form-group">
+                {{ form_label(form.price) }}                
+                {{ form_widget(form.price) }}  
+                <div class="form-error">
+                    {{ form_errors(form.price) }}            
+                </div>              
+            </div>
+            <div class="form-group">
+                {{ form_row(form) }}
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{# {% block scripts %}
+<script>
+    // Fonction pour masquer le message flash après le délai spécifié
+    function hideFlashMessage() {
+        const flashMessages = document.querySelectorAll('.alert');
+        flashMessages.forEach((message) => {
+            const timer = parseInt(message.getAttribute('data-timer'));
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, timer);
+        });
+    }
+
+    // Appel de la fonction au chargement de la page
+    window.addEventListener('load', hideFlashMessage);
+</script>
+{% endblock %} #}

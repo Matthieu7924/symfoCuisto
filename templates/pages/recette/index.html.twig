@@ -43,8 +43,7 @@
                         <td>{{ recette.price is same as(null) ? 'NR' : recette.price }}</td>
                         <td>{{ recette.difficulty is same as(null) ? 'NR' : recette.difficulty }}</td>
                         <td>{{ recette.createdAt|date('d/m/Y') }}</td>
-                        {# <td><a href="{{ path('recette_update', {id: recette.id}) }}" class="btn btn-info">Modifier</a></td>
-                        <td><a href="{{ path('recette_delete', {id: recette.id}) }}" class="btn btn-warning">Supprimer</a></td> #}
+                        <td><a href="{{ path('recette_update', {id: recette.id}) }}" class="btn btn-info">Modifier</a></td>
                     </tr>
                 {% endfor %}
             </tbody>

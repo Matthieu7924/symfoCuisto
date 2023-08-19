@@ -33,6 +33,8 @@ class RecetteController extends AbstractController
         ]);
     }
 
+
+    //CREATION RECETTE
     #[Route('/recette/creation', name: 'recette_new', methods:['GET', 'POST'])]
     public function new(
         Request $request,
@@ -63,11 +65,11 @@ class RecetteController extends AbstractController
         ]);
     }
 
+    //EDITION RECETTE
     #[Route('/recette/edition/{id}', name: 'recette_update', methods:['GET', 'POST'])]
     public function edit(
         RecetteRepository $repo,
         int $id,
-        // Ingredient $ingredient,
         Request $request, 
         EntityManagerInterface $em 
         ):Response
