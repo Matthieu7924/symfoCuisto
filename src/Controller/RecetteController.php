@@ -15,6 +15,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class RecetteController extends AbstractController
 {
     #[Route('/recette', name: 'app_recette', methods:['GET'])]
+    /**
+     * Undocumented function
+     *
+     * @param PaginatorInterface $paginator
+     * @param RecetteRepository $recetteRepo
+     * @param Request $request
+     * @return Response
+     */
     public function index(
         PaginatorInterface $paginator,
         RecetteRepository $recetteRepo,
@@ -36,6 +44,13 @@ class RecetteController extends AbstractController
 
     //CREATION RECETTE
     #[Route('/recette/creation', name: 'recette_new', methods:['GET', 'POST'])]
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
     public function new(
         Request $request,
         EntityManagerInterface $em
@@ -67,6 +82,15 @@ class RecetteController extends AbstractController
 
     //EDITION RECETTE
     #[Route('/recette/edition/{id}', name: 'recette_update', methods:['GET', 'POST'])]
+    /**
+     * Undocumented function
+     *
+     * @param RecetteRepository $repo
+     * @param integer $id
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
     public function edit(
         RecetteRepository $repo,
         int $id,
@@ -95,6 +119,40 @@ class RecetteController extends AbstractController
             'form'=>$form->createView()
         ]);
     }
+
+
+    //SUPPRESSION RECETTE
+    #[Route('/recette/suppression/{id}', name: 'recette_delete', methods:['GET'])]
+    /**
+     * Undocumented function
+     *
+     * @param EntityManagerInterface $em
+     * @param [type] $id
+     * @return Response
+     */
+    public function delete(
+        EntityManagerInterface $em, 
+        $id): Response
+    {
+        $recette = $em->getRepository(Recette::class)->find($id);
+        if(!$recette)
+        {
+            $this->addFlash(
+                'success',
+                'recette introuvable'
+            );
+            return $this->redirectToRoute('app_recette');
+        }
+            $em->remove($recette);
+            $em->flush();
+            $this->addFlash(
+                'success',
+                'recette correctement supprimée'
+            );
+            return $this->redirectToRoute('app_recette');
+        
+    }
+
 
 
 }
