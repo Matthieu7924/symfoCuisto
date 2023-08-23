@@ -22,4 +22,11 @@ class SecurityController extends AbstractController
             'error' => $error,
         ]);
     }
+
+    #[Route('/deconnexion', name: 'security.logout', methods:['GET', 'POST'])]
+    public function logout()
+    {
+        
+    }
+
 }
