@@ -8,6 +8,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 
 class RegistrationType extends AbstractType
@@ -22,8 +27,8 @@ class RegistrationType extends AbstractType
                     'maxlength' => '50',
                 ],
                 'label' => 'Nom / Prénom',
-                'label_attr ' => [
-                    'class' => 'form-label'
+                'label_attr' => [
+                    'class' => 'mt-4 form-label'
                 ],
                 'constraints' => [
                     new Assert\NotBlank(),
@@ -36,9 +41,10 @@ class RegistrationType extends AbstractType
                     'minlength' =>'2',
                     'maxlength' => '50',
                 ],
+                'required' => false,
                 'label' => 'Pseudo (facultatif)',
-                'label_attr ' => [
-                    'class' => 'form-label'
+                'label_attr' => [
+                    'class' => 'mt-4 form-label'
                 ],
                 'constraints' => [
                     new Assert\Length(['min'=>2, 'max'=>50])
@@ -51,8 +57,8 @@ class RegistrationType extends AbstractType
                     'maxlength' => '180',
                 ],
                 'label' => 'Adresse Email',
-                'label_attr ' => [
-                    'class' => 'form-label'
+                'label_attr' => [
+                    'class' => 'mt-4 form-label'
                 ],
                 'constraints' => [
                     new Assert\NotBlank(),
@@ -60,18 +66,32 @@ class RegistrationType extends AbstractType
                     new Assert\Length(['min'=>2, 'max'=>180])
                 ]
             ])
-            ->add('password', RepeatedType::class,[
+            ->add('plainPassword', RepeatedType::class,[
                 'type' => PasswordType::class,
                 'first_options' =>[
+                    'attr' =>[
+                        'class'=>'form-control'
+                    ],
                     'label' => 'Mot de passe',
+                    'label_attr' =>[
+                        'class' => 'mt-4 form-label'
+                    ]
                 ],
                 'second_options'=>[
-                    'label'=>'Confirmation du mot de passe'
+                    'attr' =>[
+                        'class'=>'form-control'
+                    ],
+                    'label' => 'Confirmation de mot de passe',
+                    'label_attr' =>[
+                        'class' => 'mt-4 form-label'
+                    ]
                 ],
                 'invalid_message'=>'les mots de passe ne correspondent pas'
             ])
-            ->add('sunmit', SubmitType::class,[
-                'attr'=>'btn btn-primary'
+            ->add('submit', SubmitType::class,[
+                'attr'=>[
+                    'class'=>'mt-4 btn btn-primary'
+                ]
             ])
         ;
     }
