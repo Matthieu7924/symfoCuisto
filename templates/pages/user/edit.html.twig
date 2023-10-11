@@ -5,6 +5,13 @@
 {% block body %}
     <div class="container">
         <h1 class="mt-4">Formualire de modicication de l'utilisateur </h1>
+
+        {% for message in app.flashes('warning') %}
+            <div class="alert alert-warning" data-timer="10000">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         {{ form(form) }}
     </div>
 {% endblock %}

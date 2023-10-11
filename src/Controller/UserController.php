@@ -4,11 +4,14 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
 
 class UserController extends AbstractController
 {
@@ -19,40 +22,55 @@ class UserController extends AbstractController
         $this->entityManager = $entityManager;
     }
     #[Route('/utilisateur/edition/{id}', name: 'user.edit')]
-    public function edit(int $id, Request $request, EntityManagerInterface $manager): Response
-    {
+    public function edit(
+        int $id, 
+        Request $request, 
+        EntityManagerInterface $manager,
+        UserPasswordHasherInterface $hasher
+    ): Response {
         $user = $this->entityManager->getRepository(User::class)->find($id);
-
-        if(!$this->getUser())
-        {
-            return $this->redirectToRoute('security.login');
-        }
-
-        // dd($user, $this->getUser());
-
-        if($this->getUser() !== $user)
-        {
-            return $this->redirectToRoute('app_recette');
-        }
-
-        $form = $this->createForm(UserType::class, $user);
-
-        $form->handleRequest($request);
-        if($form->isSubmitted()&& $form->isValid())
-        {
-            $user = $form->getData();
-            $manager->persist($user);
-            $manager->flush();
-
+    
+        if ($user === null) {
             $this->addFlash(
-                'success',
-                'les infos de votre compte ont bien été modifiées'
+                'error',
+                'Cet utilisateur n\'existe pas.'
             );
             return $this->redirectToRoute('app_recette');
         }
-
+    
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('security.login');
+        }
+    
+        $form = $this->createForm(UserType::class, $user);
+    
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($hasher->isPasswordValid($user, $form->get('plainPassword')->getData())) {
+                // Le mot de passe est correct, vous pouvez enregistrer les modifications
+                $updatedUser = $form->getData();
+                $manager->persist($updatedUser);
+                $manager->flush();
+    
+                $this->addFlash(
+                    'success',
+                    'Les informations de votre compte ont bien été modifiées.'
+                );
+    
+                return $this->redirectToRoute('app_recette');
+            } 
+            else{
+                $this->addFlash(
+                    'warning',
+                    'Le mot de passe saisi est incorrect.'
+                );
+            }
+        }
+    
         return $this->render('pages/user/edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+
 }
