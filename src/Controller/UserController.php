@@ -4,13 +4,14 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Form\UserPasswordType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 
 class UserController extends AbstractController
@@ -21,13 +22,14 @@ class UserController extends AbstractController
     {
         $this->entityManager = $entityManager;
     }
+
     #[Route('/utilisateur/edition/{id}', name: 'user.edit')]
     public function edit(
         int $id, 
         Request $request, 
         EntityManagerInterface $manager,
         UserPasswordHasherInterface $hasher
-    ): Response {
+        ): Response {
         $user = $this->entityManager->getRepository(User::class)->find($id);
     
         if ($user === null) {
@@ -72,5 +74,66 @@ class UserController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    // #[Route('/utilisateur/edition-mdp/{id}', name:'user.edit.password', methods:['GET', 'POST'])]
+    // public function editPassword(
+    //     User $user,
+    //     Request $request
+    //     ) : Response
+    // {
+    //     $form = $this->createForm(UserPasswordType::class);
+    //     return $this->render('pages/user/edit_password.html.twig',[
+    //         'form'=>$form->createView()
+    //     ]);
+    // }
+
+    #[Route('/utilisateur/edition-mdp/{id}', name: 'user.edit.password', methods: ['GET', 'POST'])]
+    public function editPassword(
+        int $id, 
+        EntityManagerInterface $manager, 
+        Request $request,
+        UserPasswordHasherInterface $hasher): Response
+    {
+        $user = $manager->getRepository(User::class)->find($id);
+
+        $form = $this->createForm(UserPasswordType::class);
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            if($hasher->isPasswordValid($user, $form->getData()['plainPassword']))
+            {
+                    $user->setPassword(
+                        $hasher->hashPassword(
+                            $user,
+                            $form->getData()['newPassword']
+                        )
+                    );
+
+                // dd($user);
+
+                $this->addFlash(
+                    'success',
+                    'Le mot de passe a été correctement modifié.'
+                );
+
+                $manager->persist($user);
+                $manager->flush();
+                
+                return $this->redirectToRoute('app_recette');
+            }
+            else
+            {
+                $this->addFlash(
+                    'warning',
+                    'Le mot de passe saisi est incorrect.'
+                );
+            }
+        }
+        return $this->render('pages/user/edit_password.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
 
 }
